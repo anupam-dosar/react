@@ -1,11 +1,17 @@
 // "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0"
 
 import { useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
 
-import styles from "./Form.module.css";
+import Spinner from "./Spinner";
 import Button from "./Button";
 import BackButton from "./BackButton";
 import { useUrlPosition } from "../hooks/useUrlPosition";
+
+import styles from "./Form.module.css";
+import "react-datepicker/dist/react-datepicker.css";
+import { useCityState } from "../contexts/CityContext";
+import { useNavigate } from "react-router-dom";
 
 export function convertToEmoji(countryCode) {
   const codePoints = countryCode
@@ -24,6 +30,10 @@ function Form() {
   const [date, setDate] = useState(new Date());
   const [notes, setNotes] = useState("");
   const [isGeocoding, setIsGeocoding] = useState(false);
+
+  const navigate = useNavigate();
+
+  const { createCity, isLoading } = useCityState();
 
   const [lat, lng] = useUrlPosition();
   // console.log(lat, lng);
@@ -52,8 +62,28 @@ function Form() {
     fetchCityData();
   }, [lat, lng]);
 
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    if (!cityName || !date) return;
+
+    const newCity = {
+      cityName: cityName,
+      country: country,
+      emoji: emoji,
+      date: date,
+      notes: notes,
+      position: {
+        lat: lat,
+        lng: lng,
+      },
+    };
+    await createCity(newCity);
+    navigate("/app/cities");
+  }
+
   return (
-    <form className={styles.form}>
+    <form className={`${styles.form} ${isLoading ? styles.loading : ""}`} onSubmit={handleSubmit}>
       {isGeocoding && <span>loading..</span>}
       <div className={styles.row}>
         <label htmlFor="cityName">City name</label>
@@ -63,16 +93,25 @@ function Form() {
 
       <div className={styles.row}>
         <label htmlFor="date">When did you go to {cityName}?</label>
-        <input id="date" onChange={(e) => setDate(e.target.value)} value={date} />
+        <DatePicker
+          selected={date}
+          onChange={(date) => setDate(date)}
+          dateFormat="dd/MM/yyyy"
+          id="date"
+        />
       </div>
 
       <div className={styles.row}>
-        <label htmlFor="notes">Notes about your trip to {cityName}</label>
+        <label htmlFor="notes">
+          Notes about your trip to {cityName}, {country}
+        </label>
         <textarea id="notes" onChange={(e) => setNotes(e.target.value)} value={notes} />
       </div>
 
       <div className={styles.buttons}>
-        <Button type="primary">Add</Button>
+        <Button type="primary" key="frmSubmit">
+          Add
+        </Button>
         <BackButton />
       </div>
     </form>

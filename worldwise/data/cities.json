@@ -1,40 +1,208 @@
 {
   "cities": [
     {
-      "cityName": "Lisbon",
-      "country": "Portugal",
-      "emoji": "🇵🇹",
-      "date": "2027-10-31T15:59:59.138Z",
-      "notes": "My favorite city so far!",
+      "id": "7fd5",
+      "cityName": "Lucknow",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T06:59:59.697Z",
+      "notes": "sdfsd",
       "position": {
-        "lat": 38.727881642324164,
-        "lng": -9.140900099907554
-      },
-      "id": 73930385
+        "lat": "26.83632531613058",
+        "lng": "80.93078613281251"
+      }
     },
     {
-      "cityName": "Madrid",
-      "country": "Spain",
-      "emoji": "🇪🇸",
-      "date": "2027-07-15T08:22:53.976Z",
+      "id": "b02d",
+      "cityName": "Bengaluru",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-09-02T07:03:02.000Z",
+      "notes": "aa",
+      "position": {
+        "lat": "12.976456704432254",
+        "lng": "77.58819580078126"
+      }
+    },
+    {
+      "id": "013f",
+      "cityName": "Kanpur",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T07:04:27.715Z",
+      "notes": "aaa",
+      "position": {
+        "lat": "26.453361257321596",
+        "lng": "80.32859802246095"
+      }
+    },
+    {
+      "id": "85cf",
+      "cityName": "Cuttack",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T07:13:27.067Z",
+      "notes": "abc",
+      "position": {
+        "lat": "20.466580976315036",
+        "lng": "85.88150024414062"
+      }
+    },
+    {
+      "id": "aec9",
+      "cityName": "Paradip Garh",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T07:15:19.374Z",
+      "notes": "qqq",
+      "position": {
+        "lat": "20.264773719892872",
+        "lng": "86.65603637695314"
+      }
+    },
+    {
+      "id": "69af",
+      "cityName": "Puri",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T07:15:59.005Z",
+      "notes": "🙏",
+      "position": {
+        "lat": "19.80450098472796",
+        "lng": "85.81850051879884"
+      }
+    },
+    {
+      "id": "9617",
+      "cityName": "Bhubaneswar",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T07:16:29.238Z",
+      "notes": "...",
+      "position": {
+        "lat": "20.246736652244206",
+        "lng": "85.8416748046875"
+      }
+    },
+    {
+      "id": "a089",
+      "cityName": "Mysore",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T07:16:58.041Z",
       "notes": "",
       "position": {
-        "lat": 40.46635901755316,
-        "lng": -3.7133789062500004
-      },
-      "id": 17806751
+        "lat": "12.305789736824218",
+        "lng": "76.65487289428712"
+      }
     },
     {
-      "cityName": "Berlin",
-      "country": "Germany",
-      "emoji": "🇩🇪",
-      "date": "2027-02-12T09:24:11.863Z",
-      "notes": "Amazing 😃",
+      "id": "648a",
+      "cityName": "Bareilly",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T07:20:01.553Z",
+      "notes": "fasdfsd",
       "position": {
-        "lat": 52.53586782505711,
-        "lng": 13.376933665713324
-      },
-      "id": 98443197
+        "lat": "28.353942305264404",
+        "lng": "79.41501617431642"
+      }
+    },
+    {
+      "id": "a2d1",
+      "cityName": "New Delhi",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T07:20:36.406Z",
+      "notes": "aaas",
+      "position": {
+        "lat": "28.554369806808154",
+        "lng": "77.08282470703126"
+      }
+    },
+    {
+      "id": "f8f0",
+      "cityName": "Pithoragarh",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T07:29:22.305Z",
+      "notes": "home",
+      "position": {
+        "lat": "29.585325563231812",
+        "lng": "80.2148723602295"
+      }
+    },
+    {
+      "id": "4b18",
+      "cityName": "Jamnagar",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T07:30:17.318Z",
+      "notes": "",
+      "position": {
+        "lat": "22.47100274505545",
+        "lng": "70.05929946899415"
+      }
+    },
+    {
+      "id": "61f7",
+      "cityName": "Dwarka",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T07:31:03.682Z",
+      "notes": "",
+      "position": {
+        "lat": "22.240325521683207",
+        "lng": "68.96736145019533"
+      }
+    },
+    {
+      "id": "937c",
+      "cityName": "Fatehpur",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T10:22:16.395Z",
+      "notes": "",
+      "position": {
+        "lat": "25.92944910747916",
+        "lng": "80.8072328567505"
+      }
+    },
+    {
+      "id": "c2e8",
+      "cityName": "Prayagraj",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T10:22:59.312Z",
+      "notes": "",
+      "position": {
+        "lat": "25.424516685035034",
+        "lng": "81.85071945190431"
+      }
+    },
+    {
+      "id": "b755",
+      "cityName": "Varanasi",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T10:23:07.246Z",
+      "notes": "",
+      "position": {
+        "lat": "25.333941532324133",
+        "lng": "82.99896240234376"
+      }
+    },
+    {
+      "id": "9518",
+      "cityName": "Fyzabad",
+      "country": "India",
+      "emoji": "🇮🇳",
+      "date": "2024-11-27T10:23:29.245Z",
+      "notes": "",
+      "position": {
+        "lat": "26.751205545373193",
+        "lng": "82.15507507324219"
+      }
     }
   ]
 }
