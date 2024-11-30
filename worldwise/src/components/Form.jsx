@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 
-import Spinner from "./Spinner";
 import Button from "./Button";
 import BackButton from "./BackButton";
 import { useUrlPosition } from "../hooks/useUrlPosition";
