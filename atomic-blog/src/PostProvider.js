@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import { createRandomPost } from "./functions";
 
 const PostContext = createContext();
@@ -23,19 +23,17 @@ function PostProvider({ children }) {
     setPosts([]);
   }
 
-  return (
-    <PostContext.Provider
-      value={{
-        posts: searchedPosts,
-        onAddPost: handleAddPost,
-        onClearPosts: handleClearPosts,
-        searchQuery: searchQuery,
-        setSearchQuery: setSearchQuery,
-      }}
-    >
-      {children}
-    </PostContext.Provider>
-  );
+  const providerValue = useMemo(() => {
+    return {
+      posts: searchedPosts,
+      onAddPost: handleAddPost,
+      onClearPosts: handleClearPosts,
+      searchQuery: searchQuery,
+      setSearchQuery: setSearchQuery,
+    };
+  }, [searchedPosts, searchQuery]);
+
+  return <PostContext.Provider value={providerValue}>{children}</PostContext.Provider>;
 }
 
 function usePosts() {
