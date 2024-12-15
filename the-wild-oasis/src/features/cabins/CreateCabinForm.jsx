@@ -1,78 +1,143 @@
-import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
-import Input from "../../ui/Input";
+import { processCabin } from "../../services/apiCabins";
+
 import Form from "../../ui/Form";
+import Input from "../../ui/Input";
 import Button from "../../ui/Button";
-import FileInput from "../../ui/FileInput";
+import FormRow from "../../ui/FormRow";
 import Textarea from "../../ui/Textarea";
+import FileInput from "../../ui/FileInput";
 
-const FormRow = styled.div`
-  display: grid;
-  align-items: center;
-  grid-template-columns: 24rem 1fr 1.2fr;
-  gap: 2.4rem;
+function CreateCabinForm({ cabinToEdit = {} }) {
+  const { id: editId, ...editValues } = cabinToEdit;
 
-  padding: 1.2rem 0;
+  const isModeEdit = Boolean(editId);
 
-  &:first-child {
-    padding-top: 0;
+  const { register, handleSubmit, reset, getValues, formState } = useForm({
+    defaultValues: isModeEdit ? editValues : {},
+  });
+
+  const { errors } = formState;
+
+  const queryClient = useQueryClient();
+  const { isLoading, mutate: createCabin } = useMutation({
+    mutationFn: (data) => processCabin(data),
+    onSuccess: () => {
+      toast.success("Cabin created successfully.");
+
+      queryClient.invalidateQueries({
+        queryKey: ["cabins"],
+      });
+      reset();
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+  const { isLoading: isEditing, mutate: updateCabin } = useMutation({
+    mutationFn: ({ data, id }) => processCabin(data, id),
+    onSuccess: () => {
+      toast.success("Cabin updated successfully.");
+
+      queryClient.invalidateQueries({
+        queryKey: ["cabins"],
+      });
+      reset();
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
+  function handleFormSubmit(data) {
+    console.log(data);
+    if (isModeEdit) {
+      const image = typeof data.image === "string" ? data.image : data.image[0];
+      updateCabin({ data: { ...data, image }, id: editId });
+    } else {
+      createCabin({ ...data, image: data.image[0] });
+    }
   }
 
-  &:last-child {
-    padding-bottom: 0;
+  function handleSubmitErrors(errors) {
+    console.log(errors);
   }
 
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
+  const isProcessing = isLoading || isEditing;
 
-  &:has(button) {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1.2rem;
-  }
-`;
-
-const Label = styled.label`
-  font-weight: 500;
-`;
-
-const Error = styled.span`
-  font-size: 1.4rem;
-  color: var(--color-red-700);
-`;
-
-function CreateCabinForm() {
   return (
-    <Form>
-      <FormRow>
-        <Label htmlFor="name">Cabin name</Label>
-        <Input type="text" id="name" />
+    <Form onSubmit={handleSubmit(handleFormSubmit, handleSubmitErrors)}>
+      <FormRow label="Cabin name" errors={errors}>
+        <Input
+          type="text"
+          id="name"
+          disabled={isProcessing}
+          {...register("name", { required: "Required: Cabin name" })}
+        />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="maxCapacity">Maximum capacity</Label>
-        <Input type="number" id="maxCapacity" />
+      <FormRow label="Maximum capacity" errors={errors}>
+        <Input
+          type="number"
+          step="1"
+          disabled={isProcessing}
+          id="maxCapacity"
+          {...register("maxCapacity", {
+            required: "Required: Maximum capacity",
+            min: { value: 1, message: "Minimum allowed capacity is one." },
+          })}
+        />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="regularPrice">Regular price</Label>
-        <Input type="number" id="regularPrice" />
+      <FormRow label="Regular price" errors={errors}>
+        <Input
+          type="number"
+          step="0.1"
+          disabled={isProcessing}
+          id="regularPrice"
+          {...register("regularPrice", {
+            required: "Required: Regular price",
+            min: { value: 1, message: "Price can not be zero" },
+          })}
+        />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="discount">Discount</Label>
-        <Input type="number" id="discount" defaultValue={0} />
+      <FormRow label="Discount" errors={errors}>
+        <Input
+          type="number"
+          step="0.1"
+          disabled={isProcessing}
+          id="discount"
+          defaultValue={0}
+          {...register("discount", {
+            required: "Required: Discount, if any",
+            validate: (value) =>
+              value <= Number(getValues().regularPrice) * 0.2 ||
+              "Discount can not be greater then 20% of regular price",
+          })}
+        />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="description">Description for website</Label>
-        <Textarea type="number" id="description" defaultValue="" />
+      <FormRow label="Description for website" errors={errors}>
+        <Textarea
+          id="description"
+          disabled={isProcessing}
+          defaultValue=""
+          {...register("description", { required: "Required: Description for website" })}
+        />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="image">Cabin photo</Label>
-        <FileInput id="image" accept="image/*" />
+      <FormRow label="Cabin photo" errors={errors}>
+        <FileInput
+          id="image"
+          accept="image/*"
+          {...register("image", {
+            required: isModeEdit && editValues.image !== null ? false : "Required: Cabin Image",
+          })}
+        />
       </FormRow>
 
       <FormRow>
@@ -80,7 +145,11 @@ function CreateCabinForm() {
         <Button variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button>Edit cabin</Button>
+        <Button disabled={isProcessing}>
+          {isProcessing
+            ? `${isModeEdit ? "Updating" : "Creating"} Cabin`
+            : `${isModeEdit ? "Edit" : "Add"} cabin`}
+        </Button>
       </FormRow>
     </Form>
   );

@@ -5,6 +5,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCabin } from "../../services/apiCabins";
 import toast from "react-hot-toast";
 
+import { HiOutlinePencilSquare, HiOutlineTrash } from "react-icons/hi2";
+import { useState } from "react";
+import CreateCabinForm from "./CreateCabinForm";
+
 const TableRow = styled.div`
   display: grid;
   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
@@ -44,6 +48,17 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
+const ActionWrapper = styled.div`
+  display: flex;
+  justify-content: end;
+  gap: 1rem;
+`;
+
+const StyledIcon = styled.span`
+  cursor: pointer;
+  font-size: 1.25em;
+`;
+
 function CabinRow({ cabin }) {
   const { id: cabinId, name, maxCapacity, regularPrice, discount, image } = cabin;
 
@@ -51,30 +66,38 @@ function CabinRow({ cabin }) {
   const { isLoading: isDeleting, mutate } = useMutation({
     mutationFn: (id) => deleteCabin(id),
     onSuccess: () => {
-      console.log("a");
       toast.success("Cabin deleted successfully");
 
       queryClient.invalidateQueries({
-        queryKey: "cabins",
+        queryKey: ["cabins"],
       });
     },
     onError: (err) => {
-      console.log("b");
       toast.error(err.message);
     },
   });
 
+  const [editForm, setEditForm] = useState(false);
+
   return (
-    <TableRow role="row">
-      <Img src={image} />
-      <Cabin>{name}</Cabin>
-      <div>Fits up to {maxCapacity} guests</div>
-      <Price>{formatCurrency(regularPrice)}</Price>
-      <Discount>{formatCurrency(discount)}</Discount>
-      <button onClick={() => mutate(cabinId)} disabled={isDeleting}>
-        Delete
-      </button>
-    </TableRow>
+    <>
+      <TableRow role="row">
+        <Img src={image} />
+        <Cabin>{name}</Cabin>
+        <div>Fits up to {maxCapacity} guests</div>
+        <Price>{formatCurrency(regularPrice)}</Price>
+        <Discount>{formatCurrency(discount)}</Discount>
+        <ActionWrapper>
+          <StyledIcon onClick={() => setEditForm((show) => !show)}>
+            <HiOutlinePencilSquare />
+          </StyledIcon>
+          <StyledIcon onClick={() => mutate(cabinId)} disabled={isDeleting}>
+            <HiOutlineTrash />
+          </StyledIcon>
+        </ActionWrapper>
+      </TableRow>
+      {editForm && <CreateCabinForm cabinToEdit={cabin} />}
+    </>
   );
 }
 
