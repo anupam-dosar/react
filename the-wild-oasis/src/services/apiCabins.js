@@ -33,14 +33,16 @@ export async function processCabin(cabinData, id) {
     : `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
 
   // upload Image
-  const { error: storageError } = await supabase.storage
-    .from("cabin-images")
-    .upload(imageName, cabinData.image);
+  if (!hasImagePath) {
+    const { error: storageError } = await supabase.storage
+      .from("cabin-images")
+      .upload(imageName, cabinData.image);
 
-  // Delete cabin if storage error happens
-  if (storageError) {
-    console.log(storageError);
-    throw new Error("failed to add cabin: image upload failed");
+    // Delete cabin if storage error happens
+    if (storageError) {
+      console.log(storageError);
+      throw new Error("failed to add cabin: image upload failed");
+    }
   }
 
   let query = supabase.from("cabins");

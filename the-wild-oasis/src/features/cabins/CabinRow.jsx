@@ -2,10 +2,11 @@ import styled from "styled-components";
 
 import { formatCurrency } from "../../utils/helpers";
 
-import { HiOutlinePencilSquare, HiOutlineTrash } from "react-icons/hi2";
+import { HiOutlinePencilSquare, HiOutlineSquare2Stack, HiOutlineTrash } from "react-icons/hi2";
 import { useState } from "react";
 import CreateCabinForm from "./CreateCabinForm";
 import { useCabinDelete } from "./useDeleteCabin";
+import { useCreateCabin } from "./useCreateCabin";
 
 const TableRow = styled.div`
   display: grid;
@@ -58,11 +59,24 @@ const StyledIcon = styled.span`
 `;
 
 function CabinRow({ cabin }) {
-  const { id: cabinId, name, maxCapacity, regularPrice, discount, image } = cabin;
+  const { id: cabinId, name, maxCapacity, regularPrice, discount, image, description } = cabin;
 
   const { isDeleting, deleteCabin } = useCabinDelete();
 
+  const { isCreating, createCabin } = useCreateCabin();
+
   const [editForm, setEditForm] = useState(false);
+
+  function handleDuplicate() {
+    createCabin({
+      name: `copy of ${name}`,
+      maxCapacity,
+      regularPrice,
+      discount,
+      description,
+      image,
+    });
+  }
 
   return (
     <>
@@ -73,6 +87,9 @@ function CabinRow({ cabin }) {
         <Price>{formatCurrency(regularPrice)}</Price>
         {discount ? <Discount>{formatCurrency(discount)}</Discount> : <span>&mdash;</span>}
         <ActionWrapper>
+          <StyledIcon onClick={() => handleDuplicate()} disabled={isCreating}>
+            <HiOutlineSquare2Stack />
+          </StyledIcon>
           <StyledIcon onClick={() => setEditForm((show) => !show)}>
             <HiOutlinePencilSquare />
           </StyledIcon>
