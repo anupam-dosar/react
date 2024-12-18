@@ -10,7 +10,7 @@ import FileInput from "../../ui/FileInput";
 import { useCreateCabin } from "./useCreateCabin";
 import { useUpdateCabin } from "./useUpdateCabin";
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onClose }) {
   const { id: editId, ...editValues } = cabinToEdit;
 
   const isModeEdit = Boolean(editId);
@@ -35,6 +35,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           onSuccess: (data) => {
             console.log(data);
             reset();
+            onClose?.();
           },
         }
       );
@@ -45,6 +46,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           onSuccess: (data) => {
             console.log(data);
             reset();
+            onClose?.();
           },
         }
       );
@@ -58,7 +60,10 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   const isProcessing = isCreating || isEditing;
 
   return (
-    <Form onSubmit={handleSubmit(handleFormSubmit, handleSubmitErrors)}>
+    <Form
+      onSubmit={handleSubmit(handleFormSubmit, handleSubmitErrors)}
+      type={onClose ? "modal" : "regular"}
+    >
       <FormRow label="Cabin name" errors={errors}>
         <Input
           type="text"
@@ -130,7 +135,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button variation="secondary" type="reset" onClick={() => onClose?.()}>
           Cancel
         </Button>
         <Button disabled={isProcessing}>
