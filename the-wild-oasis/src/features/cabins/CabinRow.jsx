@@ -3,10 +3,11 @@ import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
 
 import { HiOutlinePencilSquare, HiOutlineSquare2Stack, HiOutlineTrash } from "react-icons/hi2";
-import { useState } from "react";
-import CreateCabinForm from "./CreateCabinForm";
 import { useCabinDelete } from "./useDeleteCabin";
 import { useCreateCabin } from "./useCreateCabin";
+import EditCabin from "../../pages/EditCabin";
+import Modal from "../../ui/Modal";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 
 const TableRow = styled.div`
   display: grid;
@@ -65,8 +66,6 @@ function CabinRow({ cabin }) {
 
   const { isCreating, createCabin } = useCreateCabin();
 
-  const [editForm, setEditForm] = useState(false);
-
   function handleDuplicate() {
     createCabin({
       name: `copy of ${name}`,
@@ -79,27 +78,38 @@ function CabinRow({ cabin }) {
   }
 
   return (
-    <>
-      <TableRow role="row">
-        <Img src={image} />
-        <Cabin>{name}</Cabin>
-        <div>Fits up to {maxCapacity} guests</div>
-        <Price>{formatCurrency(regularPrice)}</Price>
-        {discount ? <Discount>{formatCurrency(discount)}</Discount> : <span>&mdash;</span>}
-        <ActionWrapper>
-          <StyledIcon onClick={() => handleDuplicate()} disabled={isCreating}>
-            <HiOutlineSquare2Stack />
-          </StyledIcon>
-          <StyledIcon onClick={() => setEditForm((show) => !show)}>
+    <TableRow role="row">
+      <Img src={image} />
+      <Cabin>{name}</Cabin>
+      <div>Fits up to {maxCapacity} guests</div>
+      <Price>{formatCurrency(regularPrice)}</Price>
+      {discount ? <Discount>{formatCurrency(discount)}</Discount> : <span>&mdash;</span>}
+      <ActionWrapper>
+        <StyledIcon onClick={() => handleDuplicate()} disabled={isCreating}>
+          <HiOutlineSquare2Stack />
+        </StyledIcon>
+        <EditCabin cabin={cabin}>
+          <StyledIcon>
             <HiOutlinePencilSquare />
           </StyledIcon>
-          <StyledIcon onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>
-            <HiOutlineTrash />
-          </StyledIcon>
-        </ActionWrapper>
-      </TableRow>
-      {editForm && <CreateCabinForm cabinToEdit={cabin} />}
-    </>
+        </EditCabin>
+
+        <Modal>
+          <Modal.Open opens={`delete-cabin-${cabinId}`}>
+            <StyledIcon>
+              <HiOutlineTrash />
+            </StyledIcon>
+          </Modal.Open>
+          <Modal.Window name={`delete-cabin-${cabinId}`}>
+            <ConfirmDelete
+              resourceName={`Cabin ${name}`}
+              onConfirm={() => deleteCabin(cabinId)}
+              disabled={isDeleting}
+            />
+          </Modal.Window>
+        </Modal>
+      </ActionWrapper>
+    </TableRow>
   );
 }
 
