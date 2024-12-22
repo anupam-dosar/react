@@ -50,16 +50,16 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
-const ActionWrapper = styled.div`
-  display: flex;
-  justify-content: end;
-  gap: 1rem;
-`;
+// const ActionWrapper = styled.div`
+//   display: flex;
+//   justify-content: end;
+//   gap: 1rem;
+// `;
 
-const StyledIcon = styled.span`
-  cursor: pointer;
-  font-size: 1.25em;
-`;
+// const StyledIcon = styled.span`
+//   cursor: pointer;
+//   font-size: 1.25em;
+// `;
 
 function CabinRow({ cabin }) {
   const { id: cabinId, name, maxCapacity, regularPrice, discount, image, description } = cabin;
