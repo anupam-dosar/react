@@ -4,17 +4,10 @@ import Menus from "../../ui/Menus";
 import { useBookings } from "./useBookings";
 import Spinner from "../../ui/Spinner";
 import Empty from "../../ui/Empty";
+import Pagination from "../../ui/Pagination";
 
 function BookingTable() {
-  const { isLoading, bookings } = useBookings();
-
-  // const [sortField, sortDirection] = searchParams.get("sort")?.split("-") || ["", "asc"];
-  // const sortOptions = {
-  //   startDate: (a, b) => new Date(a.startDate) - new Date(b.startDate),
-  //   totalPrice: (a, b) => a.totalPrice - b.totalPrice,
-  // };
-  // filteredBookings.sort(sortOptions[sortField]);
-  // if (sortDirection === "desc") filteredBookings.reverse();
+  const { isLoading, numberOfBookings, bookings } = useBookings();
 
   return isLoading ? (
     <Spinner />
@@ -34,6 +27,9 @@ function BookingTable() {
           data={bookings}
           render={(booking) => <BookingRow key={booking.id} booking={booking} />}
         />
+        <Table.Footer>
+          <Pagination count={numberOfBookings} />
+        </Table.Footer>
       </Table>
     </Menus>
   ) : (
