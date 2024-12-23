@@ -4,37 +4,17 @@ import Menus from "../../ui/Menus";
 import { useBookings } from "./useBookings";
 import Spinner from "../../ui/Spinner";
 import Empty from "../../ui/Empty";
-import { useSearchParams } from "react-router-dom";
 
 function BookingTable() {
   const { isLoading, bookings } = useBookings();
-  const [searchParams] = useSearchParams();
 
-  const status = searchParams.get("status") || "all";
-
-  let filteredBookings = bookings;
-
-  switch (status) {
-    case "unconfirmed":
-      filteredBookings = bookings.filter((booking) => booking.status === "unconfirmed");
-      break;
-    case "checked-in":
-      filteredBookings = bookings.filter((booking) => booking.status === "checked-in");
-      break;
-    case "checked-out":
-      filteredBookings = bookings.filter((booking) => booking.status === "checked-out");
-      break;
-    default:
-      break;
-  }
-
-  const [sortField, sortDirection] = searchParams.get("sort")?.split("-") || ["", "asc"];
-  const sortOptions = {
-    startDate: (a, b) => new Date(a.startDate) - new Date(b.startDate),
-    totalPrice: (a, b) => a.totalPrice - b.totalPrice,
-  };
-  filteredBookings.sort(sortOptions[sortField]);
-  if (sortDirection === "desc") filteredBookings.reverse();
+  // const [sortField, sortDirection] = searchParams.get("sort")?.split("-") || ["", "asc"];
+  // const sortOptions = {
+  //   startDate: (a, b) => new Date(a.startDate) - new Date(b.startDate),
+  //   totalPrice: (a, b) => a.totalPrice - b.totalPrice,
+  // };
+  // filteredBookings.sort(sortOptions[sortField]);
+  // if (sortDirection === "desc") filteredBookings.reverse();
 
   return isLoading ? (
     <Spinner />
@@ -51,7 +31,7 @@ function BookingTable() {
         </Table.Header>
 
         <Table.Body
-          data={filteredBookings}
+          data={bookings}
           render={(booking) => <BookingRow key={booking.id} booking={booking} />}
         />
       </Table>
