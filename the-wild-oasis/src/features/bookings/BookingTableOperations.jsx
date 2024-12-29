@@ -7,6 +7,7 @@ function BookingTableOperations() {
     <TableOperations>
       <Filter
         field="status"
+        resetPage={true}
         options={[
           { value: "all", label: "All", default: true },
           { value: "checked-out", label: "Checked out" },

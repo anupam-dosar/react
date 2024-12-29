@@ -36,11 +36,14 @@ const FilterButton = styled.button`
   }
 `;
 
-function Filter({ field, options }) {
+function Filter({ field, options, resetPage }) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   function handleClick(type) {
     searchParams.set(field, type);
+    if (resetPage) {
+      searchParams.delete("page");
+    }
     setSearchParams(searchParams);
   }
 
