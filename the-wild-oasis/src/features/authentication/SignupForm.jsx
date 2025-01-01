@@ -3,19 +3,23 @@ import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
+import { useSignup } from "./useSignup";
 
 // Email regex: /\S+@\S+\.\S+/
 
 function SignupForm() {
   const {
+    reset,
     register,
     formState: { errors },
     getValues,
     handleSubmit,
   } = useForm();
 
-  function handleFormSubmit(data) {
-    console.log(data);
+  const { isSignup, userSignup } = useSignup();
+
+  function handleFormSubmit({ fullName, email, password }) {
+    userSignup({ fullName, email, password }, { onSettled: reset });
   }
 
   function handleSubmitErrors(errors) {
@@ -29,6 +33,7 @@ function SignupForm() {
           type="text"
           id="fullName"
           {...register("fullName", { required: "Required: Full name" })}
+          disabled={isSignup}
         />
       </FormRow>
 
@@ -40,6 +45,7 @@ function SignupForm() {
             required: "Required: Email address",
             pattern: { value: /\S+@\S+\.\S+/, message: "Invalid email address" },
           })}
+          disabled={isSignup}
         />
       </FormRow>
 
@@ -56,6 +62,7 @@ function SignupForm() {
                 "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character",
             },
           })}
+          disabled={isSignup}
         />
       </FormRow>
 
@@ -67,15 +74,16 @@ function SignupForm() {
             required: "Required: Confirm password",
             validate: (value) => value === getValues().password || "Passwords do not match",
           })}
+          disabled={isSignup}
         />
       </FormRow>
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button variation="secondary" type="reset" disabled={isSignup}>
           Cancel
         </Button>
-        <Button>Create new user</Button>
+        <Button disabled={isSignup}>Create new user</Button>
       </FormRow>
     </Form>
   );
