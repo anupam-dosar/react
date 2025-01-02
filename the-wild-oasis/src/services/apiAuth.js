@@ -1,10 +1,10 @@
-import supabase from "./supabase";
+import supabase, { supabaseUrl } from "./supabase";
 
 export async function signup({ fullName, email, password }) {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { fullName, avatar: "" } },
+    data: { fullName, avatar: "" },
   });
 
   if (error) {
@@ -39,7 +39,7 @@ export async function getUser() {
     throw new Error("Failed to fetch user");
   }
 
-  console.log("user", user);
+  // console.log("user", user);
   return user;
 }
 
@@ -50,4 +50,41 @@ export async function logout() {
     console.error("error", error);
     throw new Error("Logout failed. Please try again.");
   }
+}
+
+export async function updateUserData({ password, fullName, avatar }) {
+  let updateData;
+  if (password) updateData = { password };
+  if (fullName) updateData = { data: { fullName } };
+
+  const { data, error } = await supabase.auth.update(updateData);
+
+  if (error) {
+    console.error("error", error);
+    throw new Error("Update failed. Please try again.");
+  }
+
+  if (!avatar) return data;
+
+  const fileName = `${data.id}-${Math.random()}-${avatar.name}`;
+
+  const { error: storageError } = await supabase.storage.from("avatars").upload(fileName, avatar);
+
+  if (storageError) {
+    console.error("error", storageError);
+    throw new Error("Update failed. Please try again.");
+  }
+
+  const { data: updatedUser, error: updateError } = await supabase.auth.update({
+    data: {
+      avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
+    },
+  });
+
+  if (updateError) {
+    console.error("error", updateError);
+    throw new Error("Update failed. Please try again.");
+  }
+
+  return updatedUser;
 }
